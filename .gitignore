@@ -11,5 +11,5 @@ BuildingEscape/Content/StarterContent/
 #########################
 # VS Generated Files#
 #########################
-
-*.db
+*.VC.db
+*.suo
