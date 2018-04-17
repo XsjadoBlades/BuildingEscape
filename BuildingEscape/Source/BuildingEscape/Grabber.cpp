@@ -22,7 +22,7 @@ void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UE_LOG(LogTemp, Warning, TEXT("Grabber functioning"))
+	UE_LOG(LogTemp, Warning, TEXT("Grabber functioning"));
 	
 }
 
@@ -38,7 +38,21 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
 
 	// Log ViewPoint position and direction
-	UE_LOG(LogTemp, Warning, TEXT("\t\t Location = %s \t\t Rotation = %s"), *PlayerViewPointLocation.ToString(), *PlayerViewPointRotation.ToString())
+	UE_LOG(LogTemp, Warning, TEXT("\t\t Location = %s \t\t Rotation = %s"), *PlayerViewPointLocation.ToString(), *PlayerViewPointRotation.ToString());
+	
+	// Draw a red trace line in the world to visualise grab range
+	FVector LineTraceEnd = PlayerViewPointLocation + (PlayerViewPointRotation.Vector() * Reach);
+	DrawDebugLine
+	(
+		GetWorld(),
+		PlayerViewPointLocation,
+		LineTraceEnd,
+		FColor(255, 0, 0),
+		false,
+		0,
+		0,
+		10.0f
+	);
 
 	// Ray-cast out to reach distance
 
