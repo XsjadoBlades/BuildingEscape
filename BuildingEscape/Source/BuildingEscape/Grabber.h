@@ -47,4 +47,10 @@ private:
 
 	//Return hit for first physics body in reach
 	const FHitResult GetFirstPhysicsObjectInReach();
+
+	//Return line trace start of player's reach directly infront of them
+	FVector GetPlayerReachLineTraceStart();
+
+	//Return line trace end of player's reach directly infront of them
+	FVector GetPlayerReachLineTraceEnd();
 };
