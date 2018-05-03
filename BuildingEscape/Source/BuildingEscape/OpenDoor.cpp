@@ -2,6 +2,7 @@
 
 #include "OpenDoor.h"
 #include "Gameframework/Actor.h"
+#include "Components/PrimitiveComponent.h"
 #include "Engine/World.h"
 
 #define OUT
@@ -66,11 +67,13 @@ float UOpenDoor::GetTotalMassOfActorsOnPlate()
 	TArray<AActor*> OverlappingActors;
 	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
 
-	//Iterate through them adding their masses
-	for(AActor* OverlappingActor : OverlappingActors)
+	///Iterate through them adding their masses
+	for(auto& OverlappingActor : OverlappingActors)
 	{
-		//TotalMass += OverlappingActor->
+		//UE_LOG(LogTemp, Error, TEXT("Overlapping mass found - %s"), *OverlappingActor->GetName());
+		TotalMass += OverlappingActor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
 	}
+	UE_LOG(LogTemp, Error, TEXT("Total mass on plate = %f"), TotalMass);
 
 	return TotalMass;
 }
