@@ -34,11 +34,16 @@ private:
 	UPROPERTY(EditAnywhere)
 		float TriggerMass = 70.0f;
 	UPROPERTY(EditAnywhere) 
-		ATriggerVolume* PressurePlate;
+		ATriggerVolume* PressurePlate = nullptr;
 
-	AActor* Owner = GetOwner();
+	//Owning Door
+	AActor* Owner = nullptr;
+
 	float DoorOpenTimeStamp;
 
 	//Returns total mass in kgs
 	float GetTotalMassOfActorsOnPlate();
+
+	//Find Owning Door
+	void FindOwningDoor();
 };
