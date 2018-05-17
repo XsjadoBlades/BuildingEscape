@@ -27,22 +27,6 @@ void UOpenDoor::BeginPlay()
 		//Output error message for missing component
 		UE_LOG(LogTemp, Error, TEXT("PressurePlate not present for the object %s"), *GetOwner()->GetName());
 	}
-	FindOwningDoor();
-}
-
-void UOpenDoor::OpenDoor()
-{
-	//Rotate the door to an open state
-	if (!Owner) { return; }
-	//Owner->SetActorRotation(FRotator(0.0f, OpenAngle, 0.0f));
-	OnOpenRequest.Broadcast();
-}
-
-void UOpenDoor::CloseDoor()
-{
-	//Rotate the door to an open state
-	if (!Owner) { return; }
-	Owner->SetActorRotation(FRotator(0.0f, 0.0f, 0.0f));
 }
 
 // Called every frame
@@ -51,20 +35,16 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// Poll the trigger volume every frame
-	// If the ActorThatOpens is in the volume...
-	if (GetTotalMassOfActorsOnPlate() > TriggerMass)
+	// If the total mass on the plate is greater than or equal to the TriggerMass...
+	if (GetTotalMassOfActorsOnPlate() >= TriggerMass)
 	{
 		// ...Then open the door
-		OpenDoor();
-		DoorOpenTimeStamp = GetWorld()->GetTimeSeconds();
+		OnOpen.Broadcast();
 	}
-
-	// Poll trigger volume every frame
-	// If the time since the door was last opened is greater than the delay to close the door...
-	if ((GetWorld()->GetRealTimeSeconds() - DoorOpenTimeStamp) > DoorCloseDelay)
+	else
 	{
-		// ...Then close the door
-		CloseDoor();
+		// ...close the door
+		OnClose.Broadcast();
 	}
 }
 
@@ -86,15 +66,4 @@ float UOpenDoor::GetTotalMassOfActorsOnPlate()
 	//UE_LOG(LogTemp, Error, TEXT("Total mass on plate = %f"), TotalMass);
 
 	return TotalMass;
-}
-
-void UOpenDoor::FindOwningDoor()
-{
-	Owner = GetOwner();
-	if (Owner == nullptr)
-	{
-		//Output error message for missing component
-		UE_LOG(LogTemp, Error, TEXT("PhysicsHandle component not present for the object %s"), *GetOwner()->GetName());
-	}
-	//Otherwise the Owner has been found
 }
